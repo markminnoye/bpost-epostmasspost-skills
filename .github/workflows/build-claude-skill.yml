@@ -18,13 +18,16 @@ jobs:
             # Create a clean ZIP of the skill folder's CONTENTS
             # This ensures SKILL.md is at the root of the ZIP
             cd "$skill_dir"
-            zip -r "../../dist/${skill_name}-claude-${{ github.ref_name }}.zip" .               --exclude "*.git*"
+            zip -r "../../dist/${skill_name}-claude-${{ github.ref_name }}.zip" . --exclude "*.git*"
             cd ../..
           done
 
       - name: Build bundle ZIP
         run: |
-          mkdir -p bundle-tmp/epost-masspost-bundle
+          mkdir -p bundle-tmp/epost-masspost-bundle/epost-masspost-protocol
+          mkdir -p bundle-tmp/epost-masspost-bundle/epost-masspost-tips
+          mkdir -p bundle-tmp/epost-masspost-bundle/epost-browser-automation
+          
           cp -r skills/epost-masspost-protocol/* bundle-tmp/epost-masspost-bundle/epost-masspost-protocol/
           cp -r skills/epost-masspost-tips/* bundle-tmp/epost-masspost-bundle/epost-masspost-tips/ || true
           cp -r skills/epost-browser-automation/* bundle-tmp/epost-masspost-bundle/epost-browser-automation/ || true
@@ -32,11 +35,11 @@ jobs:
           # Remove individual SKILL.md files; the bundle has its own dispatcher
           rm -f bundle-tmp/epost-masspost-bundle/*/SKILL.md
           
-          # Add bundle dispatcher (you can create this file in the repo or inline it)
+          # Add bundle dispatcher
           cat <<SKILL_EOF > bundle-tmp/epost-masspost-bundle/SKILL.md
 ---
-name: bpost-ePost-MassPost Complete
-description: Complete BPost e-MassPost suite: protocol specs, error codes, barcodes, HTTP/FTP transport, user do's & don'ts, and browser automation. Use for anything e-MassPost related.
+name: bpost-ePost-MassPost bundle
+description: Complete BPost e-MassPost suite including protocol specs, error codes, barcodes, transport, and tips. Use for anything e-MassPost related.
 license: See LICENSE
 ---
 
@@ -46,9 +49,9 @@ license: See LICENSE
 
 | When the question is about... | Read first |
 |---|---|
-| Protocol, files, error codes, barcodes, transport | `epost-masspost-protocol/index.md` |
-| Best practices, do's & don'ts, common mistakes | `epost-masspost-tips/index.md` |
-| Automating the e-MassPost web portal | `epost-browser-automation/index.md` |
+| Protocol, files, error codes, barcodes, transport | \`epost-masspost-protocol/index.md\` |
+| Best practices, do's & don'ts, common mistakes | \`epost-masspost-tips/index.md\` |
+| Automating the e-MassPost web portal | \`epost-browser-automation/index.md\` |
 
 Always start with the relevant index — it routes precisely to the right file.
 SKILL_EOF
