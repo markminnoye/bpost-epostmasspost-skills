@@ -1,6 +1,6 @@
 ---
 name: bpost-e-MassPost Browser Automation
-description: Guidance for automating the e-MassPost web portal using browser tools.
+description: Guidance for automating the e-MassPost web portal using browser tools. (v1.0.3)
 license: See LICENSE
 ---
 

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.3] - 2026-03-28
+
+### Added
+- **Version Visibility**: Included the version number directly in the `description` field of all `SKILL.md` files for better UI clarity.
+
 ## [v1.0.2] - 2026-03-28
 
 ### Fixed
