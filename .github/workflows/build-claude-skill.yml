@@ -6,11 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build Claude skill ZIPs
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
       - uses: actions/checkout@v4
 
@@ -19,38 +15,50 @@ jobs:
           mkdir -p dist
           for skill_dir in skills/*/; do
             skill_name=$(basename "$skill_dir")
-            echo "Packaging: $skill_name"
-            zip -r "dist/${skill_name}-claude-${{ github.ref_name }}.zip" \
-              "$skill_dir" \
-              --exclude "*.git*" --exclude "*.DS_Store*" --exclude "__pycache__/*"
+            # Create a clean ZIP of the skill folder's CONTENTS
+            # This ensures SKILL.md is at the root of the ZIP
+            cd "$skill_dir"
+            zip -r "../../dist/${skill_name}-claude-${{ github.ref_name }}.zip" .               --exclude "*.git*"
+            cd ../..
           done
 
       - name: Build bundle ZIP
         run: |
-          BUNDLE=bundle-tmp/epost-masspost-bundle
-          mkdir -p $BUNDLE
+          mkdir -p bundle-tmp/epost-masspost-bundle
+          cp -r skills/epost-masspost-protocol/* bundle-tmp/epost-masspost-bundle/epost-masspost-protocol/
+          cp -r skills/epost-masspost-tips/* bundle-tmp/epost-masspost-bundle/epost-masspost-tips/ || true
+          cp -r skills/epost-browser-automation/* bundle-tmp/epost-masspost-bundle/epost-browser-automation/ || true
+          
+          # Remove individual SKILL.md files; the bundle has its own dispatcher
+          rm -f bundle-tmp/epost-masspost-bundle/*/SKILL.md
+          
+          # Add bundle dispatcher (you can create this file in the repo or inline it)
+          cat <<SKILL_EOF > bundle-tmp/epost-masspost-bundle/SKILL.md
+---
+name: bpost-ePost-MassPost Complete
+description: Complete BPost e-MassPost suite: protocol specs, error codes, barcodes, HTTP/FTP transport, user do's & don'ts, and browser automation. Use for anything e-MassPost related.
+license: See LICENSE
+---
 
-          # Copy each skill's content (excluding its own SKILL.md)
-          for skill_dir in skills/*/; do
-            skill_name=$(basename "$skill_dir")
-            dest="$BUNDLE/$skill_name"
-            mkdir -p "$dest"
-            rsync -a --exclude="SKILL.md" "$skill_dir" "$dest/"
-          done
+# BPost e-MassPost — Complete Skills Suite
 
-          # Add the bundle dispatcher SKILL.md
-          cp .github/bundle-skill.md $BUNDLE/SKILL.md
+## Routing Guide
+
+| When the question is about... | Read first |
+|---|---|
+| Protocol, files, error codes, barcodes, transport | `epost-masspost-protocol/index.md` |
+| Best practices, do's & don'ts, common mistakes | `epost-masspost-tips/index.md` |
+| Automating the e-MassPost web portal | `epost-browser-automation/index.md` |
+
+Always start with the relevant index — it routes precisely to the right file.
+SKILL_EOF
 
           cd bundle-tmp
-          zip -r "../dist/epost-masspost-bundle-claude-${{ github.ref_name }}.zip" \
-            epost-masspost-bundle/ \
-            --exclude "*.git*" --exclude "*.DS_Store*"
-
-      - name: List build artifacts
-        run: ls -lh dist/
+          zip -r "../dist/epost-masspost-bundle-claude-${{ github.ref_name }}.zip" epost-masspost-bundle/ --exclude "*.git*"
+          cd ..
 
       - name: Attach to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
           files: dist/*.zip
           generate_release_notes: true
