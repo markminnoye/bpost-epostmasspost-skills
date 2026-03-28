@@ -5,36 +5,47 @@ on:
     tags:
       - 'v*'
 
+# Standard security best practice: only grant necessary permissions
+permissions:
+  contents: write
+
 jobs:
   build:
+    name: Build & Release Skill
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Build Unified Skill ZIP
         run: |
           mkdir -p dist
-          rm -rf staging && mkdir -p staging/epost-masspost
+          # Use a clean staging directory to prevent root-level bloat
+          STAGING_DIR="staging/epost-masspost"
+          mkdir -p "$STAGING_DIR"
           
           # Copy only the protocol skill contents
-          cp -r skills/epost-masspost-protocol/* staging/epost-masspost/
+          # This ensures the 60MB 'reference' folder is excluded
+          cp -r skills/epost-masspost-protocol/* "$STAGING_DIR/"
           
-          # ZIP the staging area
+          # Bundle the skill
           cd staging/epost-masspost
           zip -r "../../dist/epost-masspost-claude-${{ github.ref_name }}.zip" . -x "*.git*"
           cd ../..
 
-      - name: Verify ZIP contents and sizes
+      - name: Verify Artifact Integrity
         run: |
-          ls -lh dist/
-          echo "Listing contents of the skill ZIP to verify no bloat:"
-          unzip -l "dist/epost-masspost-claude-${{ github.ref_name }}.zip" | head -n 30 || true
+          echo "### Build Artifact Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          ls -lh dist/ | awk '{print "| " $9 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY
+          
+          echo "::group::ZIP Content Listing"
+          unzip -l "dist/epost-masspost-claude-${{ github.ref_name }}.zip"
+          echo "::endgroup::"
 
-      - name: Create or Update GitHub Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: dist/*.zip
           name: Release ${{ github.ref_name }}
