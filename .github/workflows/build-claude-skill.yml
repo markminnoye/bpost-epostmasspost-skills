@@ -15,16 +15,17 @@ jobs:
           mkdir -p dist
           for skill_dir in skills/*/; do
             skill_name=$(basename "$skill_dir")
-            # Create a clean ZIP of the skill folder's CONTENTS
-            # This ensures SKILL.md is at the root of the ZIP
-            # We exclude the reference/ directory and large PDF/PNG files
+            echo "Building ZIP for $skill_name..."
             cd "$skill_dir"
+            # We exclude the reference/ directory and all binary types
             zip -r "../../dist/${skill_name}-claude-${{ github.ref_name }}.zip" . \
-              --exclude "*.git*" \
-              --exclude "reference/*" \
-              --exclude "*.pdf" \
-              --exclude "*.png" \
-              --exclude "*.jpg"
+              -x "*.git*" \
+              -x "reference/*" \
+              -x "*.pdf" \
+              -x "*.png" \
+              -x "*.jpg" \
+              -x "*.xls" \
+              -x "*.xlsx"
             cd ../..
           done
 
@@ -34,20 +35,19 @@ jobs:
           mkdir -p bundle-tmp/epost-masspost-bundle/epost-masspost-tips
           mkdir -p bundle-tmp/epost-masspost-bundle/epost-browser-automation
           
-          # Copy everything, then prune the large/reference files
           cp -r skills/epost-masspost-protocol/* bundle-tmp/epost-masspost-bundle/epost-masspost-protocol/
           cp -r skills/epost-masspost-tips/* bundle-tmp/epost-masspost-bundle/epost-masspost-tips/ || true
           cp -r skills/epost-browser-automation/* bundle-tmp/epost-masspost-bundle/epost-browser-automation/ || true
           
           # PRUNE: Remove reference directories and non-text files from the bundle
           rm -rf bundle-tmp/epost-masspost-bundle/*/reference
-          find bundle-tmp/epost-masspost-bundle -type f \( -name "*.pdf" -o -name "*.png" -o -name "*.jpg" \) -delete
+          find bundle-tmp/epost-masspost-bundle -type f \( -name "*.pdf" -o -name "*.png" -o -name "*.jpg" -o -name "*.xls" -o -name "*.xlsx" \) -delete
           
           # Remove individual SKILL.md files; the bundle has its own dispatcher
           rm -f bundle-tmp/epost-masspost-bundle/*/SKILL.md
           
           # Add bundle dispatcher
-          cat <<SKILL_EOF > bundle-tmp/epost-masspost-bundle/SKILL.md
+          cat <<EOF > bundle-tmp/epost-masspost-bundle/SKILL.md
 ---
 name: bpost-ePost-MassPost bundle
 description: Complete BPost e-MassPost suite including protocol specs, error codes, barcodes, transport, and tips. Use for anything e-MassPost related.
@@ -65,10 +65,10 @@ license: See LICENSE
 | Automating the e-MassPost web portal | \`epost-browser-automation/index.md\` |
 
 Always start with the relevant index — it routes precisely to the right file.
-SKILL_EOF
+EOF
 
           cd bundle-tmp
-          zip -r "../dist/epost-masspost-bundle-claude-${{ github.ref_name }}.zip" epost-masspost-bundle/ --exclude "*.git*"
+          zip -r "../dist/epost-masspost-bundle-claude-${{ github.ref_name }}.zip" epost-masspost-bundle/ -x "*.git*"
           cd ..
 
       - name: Attach to GitHub Release
