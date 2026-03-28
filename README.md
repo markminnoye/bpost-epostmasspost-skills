@@ -7,6 +7,7 @@ Distributable as versioned ZIP files for Claude, Gemini, and other AI agent plat
 
 | Skill | Description | Status |
 |---|---|---|
+| [epost-masspost-bundle](staging/bundle/) | **Unified Suite**: All-in-one skill containing protocol, tips, and automation | ✅ Recommended |
 | [epost-masspost-protocol](skills/epost-masspost-protocol/) | Core protocol: schemas, flows, barcodes, error codes, transport | ✅ Available |
 | [epost-masspost-tips](skills/epost-masspost-tips/) | Do's & don'ts, best practices from field experience | 🔜 Coming soon |
 | [epost-browser-automation](skills/epost-browser-automation/) | Browser-based workflow automation for e-MassPost portal | 🔜 Coming soon |
