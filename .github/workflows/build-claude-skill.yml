@@ -1,0 +1,61 @@
+name: Build Claude Skills
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+# Standard security best practice: only grant necessary permissions
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Release Skill
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Unified Skill ZIP
+        run: |
+          mkdir -p dist
+          # Use a clean staging directory to prevent root-level bloat
+          STAGING_DIR="staging/e-masspost"
+          mkdir -p "$STAGING_DIR"
+          
+          # Copy only the protocol skill contents
+          # This ensures the 60MB 'reference' folder is excluded
+          cp -r skills/e-masspost-protocol/* "$STAGING_DIR/"
+          
+          # Inject version into SKILL.md automatically
+          # Uses the tag name (e.g., v1.0.4) to replace the version placeholder
+          sed -i "s/(v[0-9.]*)/(v${GITHUB_REF_NAME})/g" "$STAGING_DIR/SKILL.md"
+          
+          # Bundle the skill
+          cd staging/e-masspost
+          zip -r "../../dist/e-masspost-claude-${{ github.ref_name }}.zip" . -x "*.git*"
+          cd ../..
+
+      - name: Verify Artifact Integrity
+        run: |
+          echo "### Build Artifact Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          ls -lh dist/ | awk '{print "| " $9 " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY
+          
+          echo "::group::ZIP Content Listing"
+          unzip -l "dist/e-masspost-claude-${{ github.ref_name }}.zip"
+          echo "::endgroup::"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: true
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

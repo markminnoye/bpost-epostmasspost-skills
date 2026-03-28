@@ -1,24 +1,28 @@
 # bpost e-MassPost Skills Library
 
+![Beta](https://img.shields.io/badge/Status-Beta-orange)
+[![Latest Release](https://img.shields.io/github/v/release/markminnoye/bpost-e-masspost-skills?label=Download&logo=github)](https://github.com/markminnoye/bpost-e-masspost-skills/releases/latest)
+
 AI agent skill library for the **BPost e-MassPost Mail ID** data exchange protocol.
 Distributable as versioned ZIP files for Claude, Gemini, and other AI agent platforms.
+
+## Feedback & Issues
+
+This library is currently in **Beta**. If you or your AI agent encounters any errors, missing XML tags, or validation issues:
+- [🐛 Report a Bug](https://github.com/markminnoye/bpost-e-masspost-skills/issues/new/choose)
+- [✨ Request a Feature](https://github.com/markminnoye/bpost-e-masspost-skills/issues/new/choose)
 
 ## Skills
 
 | Skill | Description | Status |
 |---|---|---|
-| [epost-masspost-protocol](skills/epost-masspost-protocol/) | Core protocol: schemas, flows, barcodes, error codes, transport | ✅ Available |
-| [epost-masspost-tips](skills/epost-masspost-tips/) | Do's & don'ts, best practices from field experience | 🔜 Coming soon |
-| [epost-browser-automation](skills/epost-browser-automation/) | Browser-based workflow automation for e-MassPost portal | 🔜 Coming soon |
+| [e-masspost-protocol](skills/e-masspost-protocol/) | Core protocol: schemas, flows, barcodes, error codes, transport | ✅ Available |
 
 ## Install (Claude.ai)
 
-1. Go to the [Releases](../../releases) page
-2. Download the ZIP for the skill you want:
-   - Individual skill: `epost-masspost-protocol-claude-vX.X.X.zip`
-   - Everything: `epost-masspost-bundle-claude-vX.X.X.zip`
-3. Go to `claude.ai/customize/skills` → Upload ZIP
-4. Enable the skill
+1. Download the [Latest Release ZIP](https://github.com/markminnoye/bpost-e-masspost-skills/releases/latest) (select `e-masspost-bundle-claude-vX.X.X.zip`)
+2. Go to `claude.ai/customize/skills` → Upload ZIP
+3. Enable the skill
 
 ## Versioning
 
