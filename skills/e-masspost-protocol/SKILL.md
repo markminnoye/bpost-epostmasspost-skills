@@ -1,6 +1,6 @@
 ---
 name: bpost-e-MassPost
-description: [BETA] BPost e-MassPost Mail ID data exchange protocol. Use when building deposit/mailing files, looking up MPW/MID error codes, understanding barcode structure, or implementing HTTP/FTP transfers to bpost.
+description: "[BETA] BPost e-MassPost Mail ID data exchange protocol. Use when building deposit/mailing files, looking up MPW/MID error codes, understanding barcode structure, or implementing HTTP/FTP transfers to bpost."
 license: See LICENSE
 ---
 
