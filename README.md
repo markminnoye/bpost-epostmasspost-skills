@@ -1,6 +1,7 @@
 # bpost e-MassPost Skills Library
 
 ![Beta](https://img.shields.io/badge/Status-Beta-orange)
+[![Latest Release](https://img.shields.io/github/v/release/markminnoye/bpost-e-masspost-skills?label=Download&logo=github)](https://github.com/markminnoye/bpost-e-masspost-skills/releases/latest)
 
 AI agent skill library for the **BPost e-MassPost Mail ID** data exchange protocol.
 Distributable as versioned ZIP files for Claude, Gemini, and other AI agent platforms.
@@ -19,10 +20,9 @@ This library is currently in **Beta**. If you or your AI agent encounters any er
 
 ## Install (Claude.ai)
 
-1. Go to the [Releases](../../releases) page
-2. Download the skill ZIP: `e-masspost-claude-vX.X.X.zip`
-3. Go to `claude.ai/customize/skills` → Upload ZIP
-4. Enable the skill
+1. Download de [Laatste Release ZIP](https://github.com/markminnoye/bpost-e-masspost-skills/releases/latest) (kies `epost-masspost-bundle-claude-vX.X.X.zip`)
+2. Ga naar `claude.ai/customize/skills` → Upload ZIP
+3. Schakel de skill in
 
 ## Versioning
 
