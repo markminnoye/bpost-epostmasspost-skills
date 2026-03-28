@@ -74,8 +74,15 @@ EOF
           echo "Listing contents of the bundle ZIP to verify no bloat:"
           unzip -l "dist/epost-masspost-bundle-claude-${{ github.ref_name }}.zip" | head -n 30 || true
 
-      - name: Attach to GitHub Release
+      - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: dist/*.zip
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
           generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
