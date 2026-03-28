@@ -13,40 +13,38 @@ jobs:
       - name: Build individual skill ZIPs
         run: |
           mkdir -p dist
+          rm -rf staging && mkdir staging
           for skill_dir in skills/*/; do
             skill_name=$(basename "$skill_dir")
-            echo "Building ZIP for $skill_name..."
-            cd "$skill_dir"
-            # EXCLUDE root-level 'reference' from being bundled (at repo-root)
-            # INCLUDE all files in CURRENT dir, including XLS
-            # EXCLUDE large PDFs/PNGs if accidentally present
-            zip -r "../../dist/${skill_name}-claude-${{ github.ref_name }}.zip" . \
-              -x "*.git*" \
-              -x "*.pdf" \
-              -x "*.png" \
-              -x "*.jpg"
+            echo "Staging $skill_name..."
+            mkdir -p "staging/${skill_name}"
+            # Copy explicitly from the folder into our clean-room staging area
+            cp -r "$skill_dir"* "staging/${skill_name}/"
+            
+            # ZIP the staging area (SKILL.md is at its root)
+            cd "staging/${skill_name}"
+            zip -r "../../dist/${skill_name}-claude-${{ github.ref_name }}.zip" . -x "*.git*"
             cd ../..
           done
 
       - name: Build bundle ZIP
         run: |
-          mkdir -p bundle-tmp/epost-masspost-bundle/epost-masspost-protocol
-          mkdir -p bundle-tmp/epost-masspost-bundle/epost-masspost-tips
-          mkdir -p bundle-tmp/epost-masspost-bundle/epost-browser-automation
+          rm -rf bundle-staging && mkdir -p bundle-staging/epost-masspost-bundle
           
-          # Copy everything from skills/, but specifically EXCLUDE the ROOT reference/ folder
-          cp -r skills/epost-masspost-protocol/* bundle-tmp/epost-masspost-bundle/epost-masspost-protocol/
-          cp -r skills/epost-masspost-tips/* bundle-tmp/epost-masspost-bundle/epost-masspost-tips/ || true
-          cp -r skills/epost-browser-automation/* bundle-tmp/epost-masspost-bundle/epost-browser-automation/ || true
+          # Only copy the three specific skill folders - guarantees no root-level reference PDFs
+          mkdir -p bundle-staging/epost-masspost-bundle/epost-masspost-protocol
+          mkdir -p bundle-staging/epost-masspost-bundle/epost-masspost-tips
+          mkdir -p bundle-staging/epost-masspost-bundle/epost-browser-automation
           
-          # PRUNE: Clean up any accidentally copied large binaries
-          find bundle-tmp/epost-masspost-bundle -type f \( -name "*.pdf" -o -name "*.png" -o -name "*.jpg" \) -delete
+          cp -r skills/epost-masspost-protocol/* bundle-staging/epost-masspost-bundle/epost-masspost-protocol/
+          cp -r skills/epost-masspost-tips/* bundle-staging/epost-masspost-bundle/epost-masspost-tips/ || true
+          cp -r skills/epost-browser-automation/* bundle-staging/epost-masspost-bundle/epost-browser-automation/ || true
           
-          # Remove individual SKILL.md files; the bundle has its own dispatcher
-          rm -f bundle-tmp/epost-masspost-bundle/*/SKILL.md
+          # Remove individual SKILL.md files to prioritize the bundle-level one
+          rm -f bundle-staging/epost-masspost-bundle/*/SKILL.md
           
-          # Add bundle dispatcher
-          cat <<EOF > bundle-tmp/epost-masspost-bundle/SKILL.md
+          # Add the bundle-level Skill definition
+          cat <<EOF > bundle-staging/epost-masspost-bundle/SKILL.md
 ---
 name: bpost-ePost-MassPost bundle
 description: Complete BPost e-MassPost suite including protocol specs, error codes, barcodes, transport, and tips. Use for anything e-MassPost related.
@@ -66,12 +64,15 @@ license: See LICENSE
 Always start with the relevant index — it routes precisely to the right file.
 EOF
 
-          cd bundle-tmp
+          cd bundle-staging
           zip -r "../dist/epost-masspost-bundle-claude-${{ github.ref_name }}.zip" epost-masspost-bundle/ -x "*.git*"
           cd ..
 
-      - name: Verify ZIP sizes
-        run: ls -lh dist/
+      - name: Verify ZIP contents and sizes
+        run: |
+          ls -lh dist/
+          echo "Listing contents of the bundle ZIP to verify no bloat:"
+          unzip -l "dist/epost-masspost-bundle-claude-${{ github.ref_name }}.zip" | head -n 30 || true
 
       - name: Attach to GitHub Release
         uses: softprops/action-gh-release@v1
