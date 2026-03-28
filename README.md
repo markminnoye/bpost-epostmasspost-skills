@@ -1,7 +1,15 @@
 # bpost e-MassPost Skills Library
 
+![Beta](https://img.shields.io/badge/Status-Beta-orange)
+
 AI agent skill library for the **BPost e-MassPost Mail ID** data exchange protocol.
 Distributable as versioned ZIP files for Claude, Gemini, and other AI agent platforms.
+
+## Feedback & Issues
+
+This library is currently in **Beta**. If you or your AI agent encounters any errors, missing XML tags, or validation issues:
+- [🐛 Report a Bug](https://github.com/markminnoye/bpost-e-masspost-skills/issues/new/choose)
+- [✨ Request a Feature](https://github.com/markminnoye/bpost-e-masspost-skills/issues/new/choose)
 
 ## Skills
 
