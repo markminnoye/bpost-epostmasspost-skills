@@ -1,0 +1,56 @@
+name: Build Claude Skills
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    name: Build Claude skill ZIPs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build individual skill ZIPs
+        run: |
+          mkdir -p dist
+          for skill_dir in skills/*/; do
+            skill_name=$(basename "$skill_dir")
+            echo "Packaging: $skill_name"
+            zip -r "dist/${skill_name}-claude-${{ github.ref_name }}.zip" \
+              "$skill_dir" \
+              --exclude "*.git*" --exclude "*.DS_Store*" --exclude "__pycache__/*"
+          done
+
+      - name: Build bundle ZIP
+        run: |
+          BUNDLE=bundle-tmp/epost-masspost-bundle
+          mkdir -p $BUNDLE
+
+          # Copy each skill's content (excluding its own SKILL.md)
+          for skill_dir in skills/*/; do
+            skill_name=$(basename "$skill_dir")
+            dest="$BUNDLE/$skill_name"
+            mkdir -p "$dest"
+            rsync -a --exclude="SKILL.md" "$skill_dir" "$dest/"
+          done
+
+          # Add the bundle dispatcher SKILL.md
+          cp .github/bundle-skill.md $BUNDLE/SKILL.md
+
+          cd bundle-tmp
+          zip -r "../dist/epost-masspost-bundle-claude-${{ github.ref_name }}.zip" \
+            epost-masspost-bundle/ \
+            --exclude "*.git*" --exclude "*.DS_Store*"
+
+      - name: List build artifacts
+        run: ls -lh dist/
+
+      - name: Attach to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          generate_release_notes: true
