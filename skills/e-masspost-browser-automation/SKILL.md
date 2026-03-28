@@ -1,5 +1,5 @@
 ---
-name: bpost-ePost-Browser-Automation
+name: bpost-e-MassPost Browser Automation
 description: Guidance for automating the e-MassPost web portal using browser tools.
 license: See LICENSE
 ---

@@ -7,12 +7,12 @@ Distributable as versioned ZIP files for Claude, Gemini, and other AI agent plat
 
 | Skill | Description | Status |
 |---|---|---|
-| [epost-masspost-protocol](skills/epost-masspost-protocol/) | Core protocol: schemas, flows, barcodes, error codes, transport | ✅ Available |
+| [e-masspost-protocol](skills/e-masspost-protocol/) | Core protocol: schemas, flows, barcodes, error codes, transport | ✅ Available |
 
 ## Install (Claude.ai)
 
 1. Go to the [Releases](../../releases) page
-2. Download the skill ZIP: `epost-masspost-claude-vX.X.X.zip`
+2. Download the skill ZIP: `e-masspost-claude-vX.X.X.zip`
 3. Go to `claude.ai/customize/skills` → Upload ZIP
 4. Enable the skill
 

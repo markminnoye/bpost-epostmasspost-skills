@@ -1,5 +1,5 @@
 ---
-name: bpost-ePost-MassPost Tips
+name: bpost-e-MassPost Tips
 description: Best practices, do's & don'ts, and common troubleshooting tips for BPost e-MassPost integration.
 license: See LICENSE
 ---
