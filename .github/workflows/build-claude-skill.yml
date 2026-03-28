@@ -17,15 +17,14 @@ jobs:
             skill_name=$(basename "$skill_dir")
             echo "Building ZIP for $skill_name..."
             cd "$skill_dir"
-            # We exclude the reference/ directory and all binary types
+            # EXCLUDE root-level 'reference' from being bundled (at repo-root)
+            # INCLUDE all files in CURRENT dir, including XLS
+            # EXCLUDE large PDFs/PNGs if accidentally present
             zip -r "../../dist/${skill_name}-claude-${{ github.ref_name }}.zip" . \
               -x "*.git*" \
-              -x "reference/*" \
               -x "*.pdf" \
               -x "*.png" \
-              -x "*.jpg" \
-              -x "*.xls" \
-              -x "*.xlsx"
+              -x "*.jpg"
             cd ../..
           done
 
@@ -35,13 +34,13 @@ jobs:
           mkdir -p bundle-tmp/epost-masspost-bundle/epost-masspost-tips
           mkdir -p bundle-tmp/epost-masspost-bundle/epost-browser-automation
           
+          # Copy everything from skills/, but specifically EXCLUDE the ROOT reference/ folder
           cp -r skills/epost-masspost-protocol/* bundle-tmp/epost-masspost-bundle/epost-masspost-protocol/
           cp -r skills/epost-masspost-tips/* bundle-tmp/epost-masspost-bundle/epost-masspost-tips/ || true
           cp -r skills/epost-browser-automation/* bundle-tmp/epost-masspost-bundle/epost-browser-automation/ || true
           
-          # PRUNE: Remove reference directories and non-text files from the bundle
-          rm -rf bundle-tmp/epost-masspost-bundle/*/reference
-          find bundle-tmp/epost-masspost-bundle -type f \( -name "*.pdf" -o -name "*.png" -o -name "*.jpg" -o -name "*.xls" -o -name "*.xlsx" \) -delete
+          # PRUNE: Clean up any accidentally copied large binaries
+          find bundle-tmp/epost-masspost-bundle -type f \( -name "*.pdf" -o -name "*.png" -o -name "*.jpg" \) -delete
           
           # Remove individual SKILL.md files; the bundle has its own dispatcher
           rm -f bundle-tmp/epost-masspost-bundle/*/SKILL.md
@@ -70,6 +69,9 @@ EOF
           cd bundle-tmp
           zip -r "../dist/epost-masspost-bundle-claude-${{ github.ref_name }}.zip" epost-masspost-bundle/ -x "*.git*"
           cd ..
+
+      - name: Verify ZIP sizes
+        run: ls -lh dist/
 
       - name: Attach to GitHub Release
         uses: softprops/action-gh-release@v1
