@@ -202,17 +202,16 @@ The structure of the Action tag in the response is the same for all the actions 
 | | mailingRef | The mailing list reference that was supplied in the request file | | Yes | String | 20 | |
 | MailingCreate/Status | code | Status code (see status codes table in the annexes, S.1.1) | | Yes | String | 10 | |
 | MailingCreate/DistributionInformation | | | Depends on the data present on the FileInfo tag of the request. | No | | | |
-| MailingCreate/DistributionInformation/DistributionInformation (#N) | prtOrder | Order in which the letters should be placed in the bundle to comply with the Round&Sequence requirements | | Yes | Num | | |
+| MailingCreate/DistributionInformation/Item (#N) | prtOrder | Order in which the letters should be placed in the bundle to comply with the Round&Sequence requirements | | Yes | Num | | |
 | | seq | The sequence number of the requested item corresponding to route and sequence information | | No | Num | 8 | |
-| | fieldToPrint1 | The sorting Plan that is applicable to the item -- To print on the mailing | | No | | | |
-| | fieldToPrint2 | The ZIP code of the distributing office and the name of the route applicable to the item -- To print on the mailing and | | No | | | |
-| | fieldToPrint3 | The sequence on the route that is applicable to the item -- To print on the mailing | | No | | | |
+| | distributionOffice | The sorting Plan that is applicable to the item -- To print on the mailing | | No | String | | |
+| | routeName | The ZIP code of the distributing office and the name of the route applicable to the item -- To print on the mailing | | No | String | | |
+| | routeSeq | The sequence on the route that is applicable to the item -- To print on the mailing | | No | Num | | |
 | | orgInfo | Complementary information for the distribution office on the treatment to give to the bundles -- To print on the mailing (if present) | | No | String | 3 | |
-| | iCli | Indication that the address is the first, last or only letter for a sorting center | Begin: first letter, End: last letter, Begin_end: only one letter | No | String | | |
-| | izon | Indication that the address is the first, last or only letter for a distribution zone | Begin: first letter, End: last letter, Begin_end: only one letter | No | String | | |
-| | imac | Indication that the address is the first, last or only letter for a machine | Begin: first letter, End: last letter, Begin_end: only one letter | No | String | | |
-| | iwav | Indication that the address is the first, last or only letter for a wave | Begin: first letter, End: last letter, Begin_end: only one letter | No | String | | |
+| | icti | Indication that the address is the first, last or only letter for a sorting center | Begin: first letter, End: last letter, Begin_end: only one letter | No | String | | |
+| | isec | Indication that the address is the first, last or only letter for a distribution zone | Begin: first letter, End: last letter, Begin_end: only one letter | No | String | | |
 | | ioff | Indication that the address is the first, last or only letter for an office | Begin: first letter, End: last letter, Begin_end: only one letter | No | String | | |
+| | irnd | Indication that the address is the first, last or only letter for a round | Begin: first letter, End: last letter, Begin_end: only one letter | No | String | | |
 | MailingCreate/CustomerRefs | | | | No | | | |
 | MailingCreate/CustomerRefs/CustomerRef (#N) | key | Value copied from the request file | | Yes | String | 50 | |
 | | value | Value copied from the request file | | Yes | String | 250 | |
@@ -223,7 +222,7 @@ The structure of the Action tag in the response is the same for all the actions 
 ```
 MailingCreate|seq|mailingRef
 Status|code
-Item|fieldToPrint1|fieldToPrint2|fieldToPrint3|iCli|izon|imac|iwav|ioff|orgInfo|prtOrder (repeat n times)
+Item|distributionOffice|routeName|routeSeq|icti|isec|ioff|irnd|orgInfo|prtOrder (repeat n times)
 CustomerRef|key|value
 Reply -> See replies tag description below
 ```
@@ -236,17 +235,16 @@ Reply -> See replies tag description below
 | B to X, AA to AB | Information given in the Request file |
 | Y | midNum |
 | Z | psCode |
-| AC | fieldToPrint1 |
-| AD | fieldToPrint2 |
-| AE | fieldToPrint3 |
+| AC | distributionOffice |
+| AD | routeName |
+| AE | routeSeq |
 | AF | code (from tag "Replies") |
 | AG | orgInfo |
-| AH | iCli |
-| AI | izon |
-| AJ | imac |
-| AK | iwav |
-| AL | ioff |
-| AM | prtOrder |
+| AH | icti |
+| AI | isec |
+| AJ | ioff |
+| AK | irnd |
+| AL | prtOrder |
 
 ---
 
@@ -324,12 +322,12 @@ The MAIL ID number is "111234580251I2" and the pre-sorting code is "Ga-W2-L2".
 The content of the distribution info in response to Mailing Create using large format (round and sequence info).
 ```xml
 <DistributionInformation>
-  <Item prtOrder="1" seq="1" fieldToPrint1="val-WO" fieldToPrint2="1350-key-102"
-    fieldToPoint3="11" lcon="Begin_End iman="Begin_End" lwar="Begin_End" ioff="Begin_End"/>
-  <Item prtOrder="2" seq="2" fieldToPrint1="No-WO" fieldToPrint2="1350-key-018"
-    fieldToPoint3="11" lcon="Begin_End iman="Begin_End" lwar="Begin_End" ioff="Begin_End"/>
-  <Item prtOrder="3" seq="3" fieldToPrint1="val-WO" fieldToPrint2="1130-key-212"
-    fieldToPoint3="1" lcon="Begin_End iman="Begin_End" lwar="Begin_End" ioff="Begin_End"/>
+  <Item prtOrder="1" seq="1" distributionOffice="val-WO" routeName="1350-key-102"
+    routeSeq="11" icti="Begin_End" isec="Begin_End" ioff="Begin_End" irnd="Begin_End"/>
+  <Item prtOrder="2" seq="2" distributionOffice="No-WO" routeName="1350-key-018"
+    routeSeq="11" icti="Begin_End" isec="Begin_End" ioff="Begin_End" irnd="Begin_End"/>
+  <Item prtOrder="3" seq="3" distributionOffice="val-WO" routeName="1130-key-212"
+    routeSeq="1" icti="Begin_End" isec="Begin_End" ioff="Begin_End" irnd="Begin_End"/>
 </DistributionInformation>
 ```
 

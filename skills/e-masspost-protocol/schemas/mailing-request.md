@@ -104,10 +104,10 @@ The Context tag is necessary for proper processing by bpost communication server
 | Tag Name | Attributes | Description | Rule | Mandatory | Type | Max Length | Default |
 |----------|-----------|-------------|------|-----------|------|------------|---------|
 | Context | requestName | A constant identifying the request | Must be 'MailingRequest' | Yes | String | - | |
-| | Dataset | Required by the File Handling System | Must be 'M037_MID' | Yes | String | - | |
-| | Sender | The PRS-ID of the PBC of the sender | Must match the customer identifier in the file name (see [file-naming.md](file-naming.md)) | Yes | Num | 8 | |
-| | Receiver | Required by the File Handling System | Must be 'MID' | Yes | String | - | |
-| | Version | The file version | Must match the file version in the file name (see [file-naming.md](file-naming.md)) | Yes | String | 4 | |
+| | dataset | Required by the File Handling System | Must be 'M037_MID' | Yes | String | - | |
+| | sender | The PRS-ID of the PBC of the sender | Must match the customer identifier in the file name (see [file-naming.md](file-naming.md)) | Yes | Num | 8 | |
+| | receiver | Required by the File Handling System | Must be 'MID' | Yes | String | - | |
+| | version | The file version | Must match the file version in the file name (see [file-naming.md](file-naming.md)) | Yes | String | 4 | |
 
 ### TXT Structure
 
@@ -132,7 +132,7 @@ The Header tag is used for general information.
 | Files/RequestProps | customerFileRef | Needs to match the 10 N's of the original file name | | Yes | String | 10 | |
 | Files/ResponseProps | format | Format type for the Response File | XML or TXT. If omitted, the Response File will use the same file type as the Request File. | No | String | 3 | same as request file |
 | | compressed | Boolean value specifying if the response should be compressed or not | Y or N. If omitted, the Response File will be compressed only if the Request File was compressed. | No | Boolean | 1 | same as request file |
-| | Encrypted | Boolean value specifying if the response should be encrypted or not | Possible values: N. Encryption mode not yet supported | No | Boolean | 1 | N |
+| | encrypted | Boolean value specifying if the response should be encrypted or not | Possible values: N. Encryption mode not yet supported | No | Boolean | 1 | N |
 | | transmissionMode | Transmission mode | Possible values: HTTPS, FTP, FTPS, FTP. If omitted, the Response File will use the same mode as the Request File | No | String | 5 | same as request file |
 | CustomerRefs | | | | No | | | |
 | CustomerRefs/CustomerRef (#N) | key | Field reserved for the customer's own usage. Ignored by bpost. | | Yes | String | 50 | |

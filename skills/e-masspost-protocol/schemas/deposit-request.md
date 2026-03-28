@@ -138,7 +138,7 @@ The Header tag is used for general information.
 |----------|-----------|-------------|------|-----------|------|------------|---------|
 | Header | customerId | The PRS-ID of the PBC of the sender | Must match the customer identifier in the file name (see [file-naming.md](file-naming.md)) | Yes | Number | 8 | |
 | | accountId | Postal Business Contract of the customer | Provided by bpost | Yes | Number | 8 | |
-| | Mode | A one character field | P = Production, C = Certification, T = Test | Yes | String | 1 | |
+| | mode | A one character field | P = Production, C = Certification, T = Test | Yes | String | 1 | |
 | Files | | | | Yes | | | |
 | Files/RequestProps | customerFileRef | Needs to match the 10 N's of the original file name | | Yes | String | 10 (strictly) | |
 | Files/ResponseProps | format | Format type for the Response file | XML or TXT. If omitted, the Response file will use the same file type as the Request file. | No | String | 3 | Same as Request file |

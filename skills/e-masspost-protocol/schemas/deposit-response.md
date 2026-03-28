@@ -165,7 +165,7 @@ The structure of the Action tag in the response is the same for all the actions 
 | Tag Name | Attributes | Description | Rule | Mandatory | Type | Max Length | Default |
 |----------|-----------|-------------|------|-----------|------|------------|---------|
 | DepositCreate | seq | The sequence number of the DepositCreate action in the request file | | Yes | Num | 8 | |
-| | depositRef | The deposit reference that was supplied in the request file | | Yes | String | 20 | |
+| | depositIdentifier | The deposit reference that was supplied in the request file | | Yes | String | 20 | |
 | | depositIdentifierType | Type of depositIdentifier | depositRef or tmpDepositNr | | String | | depositRef |
 | DepositCreate/Status | code | Status code (see status codes table in annexes, S.1.1) | | Yes | String | 10 | |
 | DepositCreate/CustomerRefs | | | | No | | | |
@@ -176,7 +176,7 @@ The structure of the Action tag in the response is the same for all the actions 
 ### TXT Structure
 
 ```
-DepositCreate|seq|depositRef
+DepositCreate|seq|depositIdentifier
 Status|code
 CustomerRef|key|value
 Reply -> See replies tag description below
