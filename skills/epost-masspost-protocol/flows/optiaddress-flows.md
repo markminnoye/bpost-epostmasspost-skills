@@ -34,6 +34,11 @@ OptiAddress provides:
 
 > **Source:** PDF page 52 — Figure 14: OptiAddress Flows Schema
 
+```mermaid
+flowchart TD
+    CS[Customer System] -->|"Mailing Data Flow"| MID[MAIL ID System]
+```
+
 ### Sequence Diagram: Mailing Check
 
 > **Source:** PDF page 65 — Figure 27: Mailing Check

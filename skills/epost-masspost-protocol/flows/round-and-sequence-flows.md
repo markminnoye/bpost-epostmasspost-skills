@@ -12,6 +12,20 @@ Round & Sequence (R&S) is used **only for "Large" format** mail. It is fundament
 
 > **Source:** PDF page 40 — Figure 11: Round & Sequence Flows Schema
 
+```mermaid
+flowchart LR
+    CS["Customer System"]
+    MID["MAIL ID System"]
+    SC["SORTING CENTER"]
+    ENV["Mail Piece\n(barcode +\nsequence ref)"]
+
+    CS <-- "(1) Deposit Data Flow" --> MID
+    MID <-- "(1) Mailing Data Flow" --> CS
+    CS -- "(2) Print sequence ref\ne.g. Ca-M2-W2/7500-Reg002/1" --> ENV
+    ENV -- "(3) Mailing Flow" --> SC
+    MID <--> SC
+```
+
 The system works identically to Mail ID: the deposit data flow and mailing data flow both go to the MAIL ID system, and the physical mail goes to the sorting center. The addition is the sequence reference that gets printed on each mail piece.
 
 ## Data Exchange Options

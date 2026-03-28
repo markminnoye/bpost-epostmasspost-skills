@@ -205,8 +205,8 @@ The structure for the DepositUpdate tag is identical to DepositCreate, except th
 | | meteringNumber | Metering number | This is necessary when metering type (defined in the model) is metering or roll stamp (P.B./P.P. or FAM/MAF number) | Yes | String | 60 | Empty |
 | | router | Router name | | No | String | 200 | Empty |
 | | formByMail | Indication if the description (PDF file) should be sent by email | Y or N | No | Boolean | 1 | N |
-| | autoValidate | If Y, and the required number of addresses is reached, a deposit number will be assigned by MassPost without waiting for a Validate action. | Y or N | No | Boolean | 1 | N |
-| | description | Description of the deposit. | | No | String | 100 | Empty |
+| | autoValidate | If Y, and the required number of addresses is reached, a deposit number will be assigned by MassPost without waiting for a Validate action. If the deposit information is not coherent, validation is not possible and the system will return an error response. | Y or N | No | Boolean | 1 | N |
+| | description | Description of the deposit. The customer can add extra comments about the deposit in this field. | | No | String | 100 | Empty |
 | **DepositCreate/Deposit/Items** | | | | Yes | | | |
 | DepositCreate/Deposit/Items/Item (#N) | seq | A sequence number uniquely identifying the item within the DepositCreate action | Needs to be unique within the DepositCreate action | Yes | Num | 8 | |
 | **DepositCreate/Deposit/Items/Item/Characteristics** | | | | No | | | |
@@ -222,10 +222,11 @@ The structure for the DepositUpdate tag is identical to DepositCreate, except th
 | | value | Value of the pre-payment | | Yes | String | 250 | |
 | **DepositCreate/Deposit/ItemCount** | value | The number of items supplied in the action | The value must be equal to the number of Item tags | Yes | Number | 8 | |
 | **DepositCreate/Deposit/Options** | | | | No | | | |
-| DepositCreate/Deposit/Options/Option (#N) | id | Option id | Must be unique across all options within the action | Yes | String | 50 | |
+| DepositCreate/Deposit/Options/Option (#N) | id | Option id | Must be unique across all options within the action (available in Download Types in eMP) | Yes | String | 50 | |
 | **DepositCreate/Deposit/Options/Option/OptionQuantities** | | | | | | | |
-| DepositCreate/Deposit/Options/Option/OptionQuantities/OptionQuantity (#N) | unit | Unit in which the quantity is expressed | Only 'PCE' allowed. | Yes | String | 250 | |
+| DepositCreate/Deposit/Options/Option/OptionQuantities/OptionQuantity (#N) | unit | Unit in which the quantity is expressed | Only 'PCE' allowed. Must be unique within the option. | Yes | String | 250 | |
 | | value | Value of the quantity | | Yes | String | 250 | |
+| **DepositCreate/Sender** | | | | | | | |
 
 ### TXT Structure
 
@@ -234,7 +235,8 @@ DepositCreate|seq|depositIdentifier|depositIdentifierType|mailingRef
 Contact|seq|firstName|lastName|email|lang|phone|fax|mobile
 CustomerRef|key|value
 Contract|billTo|depositor|invoiceGrouping
-Deposit|date|modelName|modelPortalUserName|invoiceRef|meteringNumber|router|formByMail|autoValidate|description
+Deposit|date|modelName|modelPortalUserName|invoiceRef|meteringNumber|router|formByMail|autoValidate|d
+escription
 Item|seq
 Characteristic|key|value
 Quantity|unit|value (#N)
@@ -245,13 +247,19 @@ Option|id
 OptionQuantity|unit|value
 ```
 
+The structure for the DepositUpdate is identical, except for the DepositCreate action tag which is replaced by the DepositUpdate tag.
+
 ---
 
 ## DepositDelete and DepositValidate Tags
 
-A **DepositDelete** action is used to delete a deposit. It is not allowed to delete a deposit once it has been validated. If Mailing files are linked to a deposit, they will also be deleted.
+A **DepositDelete** action is used to delete a deposit (either in a DepositCreate action earlier in the same DepositRequest file or previously transmitted). It is not allowed to delete a deposit once it has been validated. If Mailing files are linked to a deposit, they will also be deleted.
 
-A **DepositValidate** action is used to validate a deposit prior to physically making a deposit, unless the deposit is previously created or updated with the autoValidate option.
+A **DepositValidate** action is used to validate a deposit (either created in a DepositCreate action earlier in the same DepositRequest file or previously transmitted). This is a necessary step in the MassPost Deposit procedure prior to physically making a deposit, unless the deposit is previously created or updated with the autoValidate option.
+
+**Note:** It is possible to put a DepositValidate action for a deposit create in the same Deposit Request file only if the mailing file is the master (in this case, it is the equivalent to an autoValidate). If deposit is the master, there is not yet any mailing file related to this deposit, and it is not possible to validate it.
+
+The structure for the DepositValidate tag is identical to DepositDelete, except for the tag name.
 
 ### XML Structure
 
@@ -261,17 +269,17 @@ A **DepositValidate** action is used to validate a deposit prior to physically m
 | | depositIdentifier | A unique customer reference identifying the deposit to delete | | Yes | String | 20 | |
 | | depositIdentifierType | Type of depositIdentifier | depositRef or tmpDepositNr | No | String | 20 | depositRef |
 | **DepositDelete/Contacts** | | | | No | | | |
-| DepositDelete/Contacts/Contact (#N) | seq | Sequence number | Needs to be unique within the action | Yes | Num | 8 | |
+| DepositDelete/Contacts/Contact (#N) | seq | A sequence number uniquely identifying the contact within the DepositCreate action | Needs to be unique within the action | Yes | Num | 8 | |
 | | firstName | First name of the contact person | | No | String | 50 | |
 | | lastName | Last name of the contact person | | No | String | 50 | |
 | | email | Email of the contact | | Yes | String | 100 | |
-| | lang | Language of the contact | 'fr' or 'nl' | Yes | String | 2 | |
-| | phone | Phone number | | No | String | 50 | |
-| | fax | Fax number | | No | String | 50 | |
-| | mobile | Mobile phone number | | No | String | 50 | |
+| | lang | A 2 characters constant indicating the mother language of the contact | 'fr' or 'nl' | Yes | String | 2 | |
+| | phone | Phone number of the contact person | | No | String | 50 | |
+| | fax | Fax number of the contact person | | No | String | 50 | |
+| | mobile | Mobile phone number of the contact person | | No | String | 50 | |
 | **DepositDelete/CustomerRefs** | | | | No | | | |
-| DepositDelete/CustomerRefs/CustomerRef (#N) | key | Customer-owned field | | Yes | String | 250 | |
-| | value | Customer-owned field | | Yes | String | 250 | |
+| DepositDelete/CustomerRefs/CustomerRef (#N) | key | Field reserved for the customer's own usage. Ignored by bpost. | | Yes | String | 250 | |
+| | value | Field reserved for the customer's own usage. Ignored by bpost. | | Yes | String | 250 | |
 
 ### TXT Structure
 
@@ -281,7 +289,8 @@ Contact|seq|firstName|lastName|email|lang|phone|fax|mobile
 CustomerRef|key|value
 ```
 
-The structure for the DepositValidate tag is identical, except DepositDelete is replaced by DepositValidate.
+The structure for the DepositValidate tag is identical, except for the DepositDelete action tag which is replaced by the DepositValidate tag.
+
 
 ---
 

@@ -4,6 +4,18 @@
 
 ## Overview
 
+> **Source:** PDF page 009 — Figure 2: Steps of the overall process
+
+```mermaid
+flowchart LR
+    A[Get Access] --> B[Implement Tech Guide]
+    B --> C[Manage Account]
+    C --> D[Telecom & Security Test]
+    D --> E[File Syntax Test]
+    E --> F[Certification]
+    F --> G[Production]
+```
+
 All data exchanges between customer and bpost follow the same three-step pattern. The customer always initiates communication -- bpost never pushes unsolicited files.
 
 ### Flow (Figure 3)
@@ -67,7 +79,7 @@ See [../schemas/deposit-request.md](../schemas/deposit-request.md) for field-lev
 
 ### Acknowledgement File
 
-The Acknowledgement File is simple and straightforward. It only confirms that the Request File was received. It does not contain processing results or validation feedback.
+The Acknowledgement File is simple and straightforward. It only confirms that the Request File was received. It does not contain processing results or validation feedback. See Part III File Syntax for the detailed structure.
 
 ### Response File (Figure 5)
 
