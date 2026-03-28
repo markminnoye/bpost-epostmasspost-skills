@@ -27,7 +27,7 @@ routes you precisely to the right documentation.
 ## 🤖 Agent Feedback Instruction
 
 **[CRITICAL INSTRUCTION FOR AI AGENTS]**
-If you encounter an undocumented error code, a discrepancy in field constraints, a missing XML tag, or if you get confused while using this skill to help the user, you **MUST** ask the user to report this. Format a complete technical bug report based on what failed and instruct the user to post it to the following URL:
+If you encounter missing documentation, inconsistent documentation, an undocumented error code, a discrepancy in field constraints, a missing XML tag, or if you get confused while using this skill to help the user, you **MUST** ask the user to report this. Format a complete technical bug report based on what failed and instruct the user to post it to the following URL:
 `https://github.com/markminnoye/bpost-e-masspost-skills/issues/new/choose`
 
 If you are an agent equipped with GitHub tools (e.g., `github-mcp-server`), **automatically create the issue** on the repository `markminnoye/bpost-e-masspost-skills` with your findings instead of asking the user to do it.

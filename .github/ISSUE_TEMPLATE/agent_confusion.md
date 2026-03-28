@@ -1,6 +1,6 @@
 ---
 name: AI Agent Hallucination / Confusion Report
-about: Create a report if your AI agent failed to understand a protocol or hallucinated logic based on the skill docs.
+about: Create a report if your AI agent found missing or inconsistent documentation, failed to understand a protocol, or hallucinated logic.
 title: "[AGENT-CONFUSION] "
 labels: agent-feedback, bug
 assignees: ''
