@@ -127,17 +127,16 @@ For XLS files, only the information given in the tag "DistributionInformation" a
 | B to X, AA to AB | Information given in the Request file |
 | Y | midNum |
 | Z | psCode |
-| AC | fieldToPrint1 |
-| AD | fieldToPrint2 |
-| AE | fieldToPrint3 |
+| AC | distributionOffice |
+| AD | routeName |
+| AE | routeSeq |
 | AF | code (from tag "Replies") |
 | AG | orgInfo |
-| AH | iCli |
-| AI | izon |
-| AJ | imac |
-| AK | iwav |
-| AL | ioff |
-| AM | prtOrder |
+| AH | icti |
+| AI | isec |
+| AJ | ioff |
+| AK | irnd |
+| AL | prtOrder |
 
 ---
 

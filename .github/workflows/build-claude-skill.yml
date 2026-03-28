@@ -28,6 +28,10 @@ jobs:
           # This ensures the 60MB 'reference' folder is excluded
           cp -r skills/e-masspost-protocol/* "$STAGING_DIR/"
           
+          # Inject version into SKILL.md automatically
+          # Uses the tag name (e.g., v1.0.4) to replace the version placeholder
+          sed -i "s/(v[0-9.]*)/(v${GITHUB_REF_NAME})/g" "$STAGING_DIR/SKILL.md"
+          
           # Bundle the skill
           cd staging/e-masspost
           zip -r "../../dist/e-masspost-claude-${{ github.ref_name }}.zip" . -x "*.git*"

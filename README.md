@@ -20,9 +20,9 @@ This library is currently in **Beta**. If you or your AI agent encounters any er
 
 ## Install (Claude.ai)
 
-1. Download de [Laatste Release ZIP](https://github.com/markminnoye/bpost-e-masspost-skills/releases/latest) (kies `epost-masspost-bundle-claude-vX.X.X.zip`)
-2. Ga naar `claude.ai/customize/skills` → Upload ZIP
-3. Schakel de skill in
+1. Download the [Latest Release ZIP](https://github.com/markminnoye/bpost-e-masspost-skills/releases/latest) (select `epost-masspost-bundle-claude-vX.X.X.zip`)
+2. Go to `claude.ai/customize/skills` → Upload ZIP
+3. Enable the skill
 
 ## Versioning
 

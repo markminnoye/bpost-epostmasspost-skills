@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.4] - 2026-03-28
+
+### Fixed
+- **Documentation Audit (Resolution)**: Finalized casing fixes for `mailing-response.md` XLS tables, ensuring all attributes like `distributionOffice` and item flags (`icti`, `isec`) are fully lowercase and XSD-compliant. Resolves final residues of **BUG-001**.
+- **README Localization**: Translated Dutch "Install" instructions to English for consistency.
+- **Workflow Automation**: Improved the GitHub Actions build script to automatically inject the correct version number into `SKILL.md` before bundling, preventing manual version mismatches.
+
 ## [v1.0.3] - 2026-03-28
 
 ### Added
